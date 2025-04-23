@@ -1,0 +1,43 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wishlist</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <div class="max-w-5xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Your Wishlist ❤️</h1>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Wishlist item 1 -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <img src="{% static 'ecommerce/store/static/images/sneekers (1).jpeg' %}" alt="Cool Sneakers" class="w-full h-40 object-cover rounded">
+                <h2 class="text-lg font-semibold mt-2">Cool Sneakers</h2>
+                <p class="text-gray-600">Stylish and comfy sneakers you'll love.</p>
+                <p class="text-green-600 font-bold mt-1">Ksh 2,999</p>
+            </div>
+
+            <!-- Wishlist item 2 -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <img src="{% static 'images/sneekers(2).jpg' %}" alt="Leather Backpack" class="w-full h-40 object-cover rounded">
+                <h2 class="text-lg font-semibold mt-2">Leather Backpack</h2>
+                <p class="text-gray-600">Perfect for school or travel.</p>
+                <p class="text-green-600 font-bold mt-1">Ksh 4,500</p>
+            </div>
+
+            <!-- Wishlist item 3 -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <img src="ecommerce/media/products/sneekers (3).jpeg" alt="Product 3" class="w-full h-40 object-cover rounded">
+                <h2 class="text-lg font-semibold mt-2">Wireless Earbuds</h2>
+                <p class="text-gray-600">Noise-cancelling, compact and powerful.</p>
+                <p class="text-green-600 font-bold mt-1">Ksh 1,800</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
