@@ -1,43 +1,57 @@
-{% load static %}
+{% extends 'store/base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Wishlist</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+{% block title %}Wishlist — Synapse{% endblock %}
 
-    <div class="max-w-5xl mx-auto py-10 px-4">
-        <h1 class="text-3xl font-bold text-center mb-8">Your Wishlist ❤️</h1>
+{% block content %}
+<div class="container mt-4">
+  <h3 class="fw-bold mb-4"><i class="fas fa-heart me-2 text-danger"></i>Your Wishlist</h3>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Wishlist item 1 -->
-            <div class="bg-white rounded-xl shadow-md p-4">
-                <img src="{% static 'ecommerce/store/static/images/sneekers (1).jpeg' %}" alt="Cool Sneakers" class="w-full h-40 object-cover rounded">
-                <h2 class="text-lg font-semibold mt-2">Cool Sneakers</h2>
-                <p class="text-gray-600">Stylish and comfy sneakers you'll love.</p>
-                <p class="text-green-600 font-bold mt-1">Ksh 2,999</p>
-            </div>
-
-            <!-- Wishlist item 2 -->
-            <div class="bg-white rounded-xl shadow-md p-4">
-                <img src="{% static 'images/sneekers(2).jpg' %}" alt="Leather Backpack" class="w-full h-40 object-cover rounded">
-                <h2 class="text-lg font-semibold mt-2">Leather Backpack</h2>
-                <p class="text-gray-600">Perfect for school or travel.</p>
-                <p class="text-green-600 font-bold mt-1">Ksh 4,500</p>
-            </div>
-
-            <!-- Wishlist item 3 -->
-            <div class="bg-white rounded-xl shadow-md p-4">
-                <img src="ecommerce/media/products/sneekers (3).jpeg" alt="Product 3" class="w-full h-40 object-cover rounded">
-                <h2 class="text-lg font-semibold mt-2">Wireless Earbuds</h2>
-                <p class="text-gray-600">Noise-cancelling, compact and powerful.</p>
-                <p class="text-green-600 font-bold mt-1">Ksh 1,800</p>
-            </div>
+  {% if items %}
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for item in items %}
+    <div class="col">
+      <div class="card h-100 position-relative">
+        <a href="{% url 'product_detail' item.product.pk %}">
+          {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
+          {% else %}
+            <img src="https://via.placeholder.com/400x200?text=No+Image" class="card-img-top">
+          {% endif %}
+        </a>
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title">
+            <a href="{% url 'product_detail' item.product.pk %}" class="text-decoration-none text-dark">
+              {{ item.product.name }}
+            </a>
+          </h6>
+          <p class="price-highlight mb-2">Ksh {{ item.product.price }}</p>
+          <div class="d-flex gap-2 mt-auto">
+            {% if item.product.in_stock %}
+              <a href="{% url 'cart_add' item.product.pk %}" class="btn btn-accent btn-sm flex-grow-1">
+                <i class="fas fa-cart-plus me-1"></i>Add to Cart
+              </a>
+            {% else %}
+              <button class="btn btn-secondary btn-sm flex-grow-1" disabled>Out of Stock</button>
+            {% endif %}
+            <a href="{% url 'wishlist_toggle' item.product.pk %}" class="btn btn-outline-danger btn-sm"
+               title="Remove from wishlist">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
         </div>
+      </div>
     </div>
+    {% endfor %}
+  </div>
 
-</body>
-</html>
-
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fas fa-heart-broken fa-4x text-muted mb-4"></i>
+    <h4 class="text-muted">Your wishlist is empty.</h4>
+    <a href="{% url 'product_list' %}" class="btn btn-accent mt-3 px-4">
+      <i class="fas fa-store me-2"></i>Discover Products
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

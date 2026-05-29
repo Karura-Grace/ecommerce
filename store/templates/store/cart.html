@@ -1,0 +1,96 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Your Cart — Synapse{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="fw-bold mb-4"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h3>
+
+  {% if items %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+              <tr>
+                <td class="align-middle">
+                  <div class="d-flex align-items-center gap-2">
+                    {% if item.product.image %}
+                      <img src="{{ item.product.image.url }}" width="50" height="50"
+                           style="object-fit:cover;border-radius:6px;">
+                    {% endif %}
+                    <a href="{% url 'product_detail' item.product.pk %}" class="text-decoration-none text-dark fw-semibold">
+                      {{ item.product.name }}
+                    </a>
+                  </div>
+                </td>
+                <td class="align-middle">Ksh {{ item.product.price }}</td>
+                <td class="align-middle" style="width:120px;">
+                  <form method="POST" action="{% url 'cart_update' item.product.pk %}" class="d-flex gap-1">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.quantity }}"
+                           class="form-control form-control-sm" style="width:65px;">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">↻</button>
+                  </form>
+                </td>
+                <td class="align-middle fw-semibold">Ksh {{ item.subtotal }}</td>
+                <td class="align-middle">
+                  <a href="{% url 'cart_remove' item.product.pk %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <a href="{% url 'product_list' %}" class="btn btn-outline-dark mt-3">
+        <i class="fas fa-arrow-left me-1"></i>Continue Shopping
+      </a>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white fw-bold">Order Summary</div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span><span>Ksh {{ total }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-muted small">
+            <span>Shipping</span><span>Calculated at checkout</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold fs-5">
+            <span>Total</span><span class="price-highlight">Ksh {{ total }}</span>
+          </div>
+          <button class="btn btn-accent w-100 mt-3 btn-lg">
+            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+    <h4 class="text-muted">Your cart is empty.</h4>
+    <a href="{% url 'product_list' %}" class="btn btn-accent mt-3 px-4">
+      <i class="fas fa-store me-2"></i>Start Shopping
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,347 +1,120 @@
+{% extends 'store/base.html' %}
 {% load static %}
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Synapse - Product List</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .card-img-top {
-      height: 200px;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    .card:hover .card-img-top {
-      transform: scale(1.05);
-    }
-    .card {
-      transition: box-shadow 0.3s ease;
-      overflow: hidden;
-    }
-    .card:hover {
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .navbar-brand {
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    .badge-stock {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1;
-    }
-    .filter-section {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    .btn-cart {
-      width: 100%;
-      margin-top: 10px;
-    }
-    .star-rating {
-      color:rgb(255, 77, 7);
-    }
-    .price-highlight {
-      font-size: 1.2rem;
-      color: #dc3545;
-    }
-    .search-box {
-      border-radius: 20px;
-      padding-left: 35px;
-    }
-    .search-icon {
-      position: absolute;
-      left: 27px;
-      top: 10px;
-      color: #6c757d;
-    }
-    <style>
-      /* Ensure the body takes up full height and uses flexbox */
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;  /* Make the body fill the entire height of the viewport */
-        margin: 0;
-      }
-    
-      /* Ensure the main content area can grow and push footer down */
-      .main-content {
-        flex: 1;
-      }
-    
-      /* Footer styling */
-      footer {
-        background-color: #343a40;
-        color: white;
-        padding: 40px 0;
-        width: 100%;  /* Make the footer span the full width of the screen */
-        position: relative;
-        bottom: 0;
-        left: 0;
-      }
-    
-      /* Container inside footer for full width */
-      .container-fluid {
-        padding-left: 0;
-        padding-right: 0;
-      }
-    
-      /* Ensure no unwanted margins or padding */
-      .container-fluid, .row, .col-md-4 {
-        padding: 0;
-        margin: 0;
-      }
-      footer {
-        width: 100%;
-        position: relative;
-        margin: 0; /* Remove any default margin */
-        padding: 0; /* Remove any default padding */
-      }
-      
-      .container-fluid {
-        padding-left: 0; /* Remove left padding */
-        padding-right: 0; /* Remove right padding */
-      }
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-    </style>
-    
-    
-  </style>
-</head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container">
-      <!-- Hamburger button to toggle sidebar -->
-      <button class="btn btn-outline-light me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-        ☰
-      </button>
-      <a class="navbar-brand" href="#">Synapse</a>
-      
-      <!-- Search Bar -->
-      <div class="d-flex ms-auto me-2 position-relative">
-        <input class="form-control search-box" type="search" placeholder="Search products..." aria-label="Search">
-      </div>
-      
-      <!-- Cart and Account Icons -->
-      <div class="d-flex">
-        <a href="#" class="btn btn-outline-light position-relative me-2">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            0
-          </span>
-        </a>
-        <a href="#" class="btn btn-outline-light">
-          <i class="fas fa-user"></i>
-        </a>
-      </div>
-    </div>
-  </nav>
-  
-  <!-- Sidebar (Offcanvas) -->
-  <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="sidebarLabel">Synapse Dashboard</h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white active" href="#"><i class="fas fa-box me-2"></i>Products</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'orders_list' %}"><i class="fas fa-shopping-bag me-2"></i>Orders</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'customers_list' %}"><i class="fas fa-users me-2"></i>Customers</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'wishlist' %}"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'settings' %}"><i class="fas fa-cog me-2"></i>Settings</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-info-circle me-2"></i>About</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-envelope me-2"></i>Contact</a></li>
-      </ul>
-      <hr>
-      <div class="text-center mt-4">
-        <button class="btn btn-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <div class="row">
-      <!-- Left Sidebar for Filters -->
-      <div class="col-lg-3 mb-4">
-        <div class="filter-section">
-          <h4>Filters</h4>
-          <hr>
-          <h6>Categories</h6>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="cat1">
-            <label class="form-check-label" for="cat1">Electronics</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="cat2">
-            <label class="form-check-label" for="cat2">Clothing</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="cat3">
-            <label class="form-check-label" for="cat3">Home & Kitchen</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="cat4">
-            <label class="form-check-label" for="cat4">Books</label>
-          </div>
-          
-          <h6 class="mt-3">Price Range</h6>
-          <input type="range" class="form-range" min="0" max="1000" id="priceRange">
-          <div class="d-flex justify-content-between">
-            <span>100ksh</span>
-            <span>10000ksh</span>
-          </div>
-          
-          <h6 class="mt-3">Rating</h6>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="rating4">
-            <label class="form-check-label" for="rating4">
-              <span class="star-rating">★★★★</span> & up
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="rating3">
-            <label class="form-check-label" for="rating3">
-              <span class="star-rating">★★★</span> & up
-            </label>
-          </div>
-          
-          <button class="btn btn-primary mt-3 w-100">Apply Filters</button>
-        </div>
-      </div>
-      
-      <!-- Product Listing -->
-      <div class="col-lg-9">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2>Product List</h2>
-          <div class="d-flex align-items-center">
-            <span class="me-2">Sort by:</span>
-            <select class="form-select">
-              <option>Popularity</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Newest First</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="row">
-          <!-- Products  --> 
+{% block title %}Products — Synapse{% endblock %}
 
-          {% load static %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
 
-          <div class="container my-5">
-            <div class="row">
-              {% for product in products %}
-                <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                  <div class="card h-100 w-100">
-                    {% if product.quantity > 2 %}
-                      <span class="badge bg-success badge-stock">In Stock</span>
-                    {% elif product.quantity > 0 %}
-                      <span class="badge bg-warning badge-stock">Low Stock</span>
-                    {% else %}
-                      <span class="badge bg-danger badge-stock">Out of Stock</span>
-                    {% endif %}
-          
-                    {% if product.image %}
-                      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                    {% else %}
-                      <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No image available">
-                    {% endif %}
-          
-                    <div class="card-body d-flex flex-column">
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="card-title mb-0">{{ product.name }}</h5>
-                        <span class="star-rating">★★★★☆</span>
-                      </div>
-                      <p class="card-text">{{ product.description }}</p>
-                      <p class="price-highlight mb-1">Ksh {{ product.price }}</p>
-          
-                      {% if product.quantity == 0 %}
-                        <button class="btn btn-secondary btn-cart mt-auto" disabled>
-                          <i class="fas fa-times me-2"></i>Out of Stock
-                        </button>
-                      {% else %}
-                        <button class="btn btn-primary btn-cart mt-auto">
-                          <i class="fas fa-cart-plus me-2"></i>Add to Cart
-                        </button>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
+    <!-- Filters Sidebar -->
+    <div class="col-lg-3 mb-4">
+      <div class="filter-section">
+        <h5 class="fw-bold mb-3"><i class="fas fa-filter me-2"></i>Filters</h5>
+        <form method="GET" action="{% url 'product_list' %}">
+          {% if request.GET.q %}
+            <input type="hidden" name="q" value="{{ request.GET.q }}">
+          {% endif %}
+
+          <h6 class="mt-3">Category</h6>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="category" id="cat_all"
+              value="" {% if not selected_category %}checked{% endif %}>
+            <label class="form-check-label" for="cat_all">All</label>
+          </div>
+          {% for cat in categories %}
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="category" id="cat_{{ cat.id }}"
+              value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}checked{% endif %}>
+            <label class="form-check-label" for="cat_{{ cat.id }}">{{ cat.name }}</label>
+          </div>
+          {% endfor %}
+
+          <h6 class="mt-4">Sort By</h6>
+          <select name="sort" class="form-select form-select-sm">
+            <option value="" {% if not selected_sort %}selected{% endif %}>Default</option>
+            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low → High</option>
+            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High → Low</option>
+            <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest First</option>
+          </select>
+
+          <button type="submit" class="btn btn-accent mt-3 w-100">Apply</button>
+          <a href="{% url 'product_list' %}" class="btn btn-outline-secondary mt-2 w-100">Clear</a>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">
+          {% if query %}
+            Results for "<strong>{{ query }}</strong>"
+          {% else %}
+            All Products
+          {% endif %}
+          <span class="text-muted fs-6 ms-2">({{ products|length }})</span>
+        </h4>
+      </div>
+
+      {% if products %}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+          <div class="card h-100 position-relative">
+            <!-- Stock badge -->
+            {% if product.stock_status == 'out' %}
+              <span class="badge bg-danger badge-stock">Out of Stock</span>
+            {% elif product.stock_status == 'low' %}
+              <span class="badge bg-warning text-dark badge-stock">Low Stock</span>
+            {% else %}
+              <span class="badge bg-success badge-stock">In Stock</span>
+            {% endif %}
+
+            <a href="{% url 'product_detail' product.pk %}">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              {% else %}
+                <img src="https://via.placeholder.com/400x200?text=No+Image" class="card-img-top" alt="No image">
+              {% endif %}
+            </a>
+
+            <div class="card-body d-flex flex-column">
+              <p class="text-muted small mb-1">{{ product.category.name|default:"Uncategorized" }}</p>
+              <h6 class="card-title mb-1">
+                <a href="{% url 'product_detail' product.pk %}" class="text-decoration-none text-dark">{{ product.name }}</a>
+              </h6>
+              <p class="card-text text-muted small flex-grow-1">{{ product.description|truncatechars:80 }}</p>
+              <p class="price-highlight mb-2">Ksh {{ product.price }}</p>
+
+              <div class="d-flex gap-2">
+                {% if product.in_stock %}
+                  <a href="{% url 'cart_add' product.pk %}" class="btn btn-accent btn-sm flex-grow-1">
+                    <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                  </a>
+                {% else %}
+                  <button class="btn btn-secondary btn-sm flex-grow-1" disabled>Out of Stock</button>
+                {% endif %}
+                {% if user.is_authenticated %}
+                  <a href="{% url 'wishlist_toggle' product.pk %}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-heart"></i>
+                  </a>
+                {% endif %}
+              </div>
             </div>
           </div>
-          
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No products found.</h5>
+        <a href="{% url 'product_list' %}" class="btn btn-accent mt-2">Browse All Products</a>
+      </div>
+      {% endif %}
+    </div>
 
-          
-        <!-- Pagination -->
-        <nav aria-label="Page navigation" class="mt-4">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
   </div>
-  
-  <!-- Footer -->
-  <footer class="bg-light text-dark py-4 mt-5" style="width: 100%; position: relative; margin: 0; padding: 0;">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-4">
-          <h5>Synapse</h5>
-          <p>Your one-stop shop for all your electronic needs.</p>
-          <div class="d-flex">
-            <a href="#" class="text-green me-3"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="text-green me-3"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="text-green me-3"><i class="fab fa-instagram"></i></a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="text-dark">Home</a></li>
-            <li><a href="#" class="text-dark">Products</a></li>
-            <li><a href="#" class="text-dark">About Us</a></li>
-            <li><a href="#" class="text-dark">Contact</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h5>Newsletter</h5>
-          <p>Subscribe to get updates on new products and special offers.</p>
-          <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email address">
-            <button class="btn btn-primary" type="button">Subscribe</button>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="text-center">
-        <p class="mb-0">&copy; 2025 Synapse. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-  <!-- Bootstrap JS bundle (including Popper.js for offcanvas) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}

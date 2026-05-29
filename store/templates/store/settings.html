@@ -1,72 +1,143 @@
-<!-- settings.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Head content similar to orders page -->
-</head>
-<body>
-  <!-- Include navbar and sidebar -->
-  
-  <div class="container mt-4">
-    <h1>Settings</h1>
-    
-    <div class="row mt-4">
-      <div class="col-md-3">
-        <div class="list-group">
-          <a href="#general" class="list-group-item list-group-item-action active" data-bs-toggle="list">General</a>
-          <a href="#store" class="list-group-item list-group-item-action" data-bs-toggle="list">Store Settings</a>
-          <a href="#payment" class="list-group-item list-group-item-action" data-bs-toggle="list">Payment Methods</a>
-          <a href="#shipping" class="list-group-item list-group-item-action" data-bs-toggle="list">Shipping Options</a>
-          <a href="#tax" class="list-group-item list-group-item-action" data-bs-toggle="list">Tax Settings</a>
-          <a href="#emails" class="list-group-item list-group-item-action" data-bs-toggle="list">Email Templates</a>
-        </div>
+{% extends 'store/base.html' %}
+
+{% block title %}Settings — Synapse{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="fw-bold mb-4"><i class="fas fa-cog me-2"></i>Settings</h3>
+
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="list-group shadow-sm">
+        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+          <i class="fas fa-user me-2"></i>Profile
+        </a>
+        <a href="#store" class="list-group-item list-group-item-action" data-bs-toggle="list">
+          <i class="fas fa-store me-2"></i>Store
+        </a>
+        <a href="#password" class="list-group-item list-group-item-action" data-bs-toggle="list">
+          <i class="fas fa-lock me-2"></i>Password
+        </a>
+        <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
+          <i class="fas fa-bell me-2"></i>Notifications
+        </a>
       </div>
-      <div class="col-md-9">
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="general">
-            <div class="card">
-              <div class="card-header bg-dark text-white">General Settings</div>
-              <div class="card-body">
-                <form>
-                  <div class="mb-3">
-                    <label for="storeName" class="form-label">Store Name</label>
-                    <input type="text" class="form-control" id="storeName" value="Synapse">
+    </div>
+
+    <div class="col-md-9">
+      <div class="tab-content">
+
+        <!-- Profile Tab -->
+        <div class="tab-pane fade show active" id="profile">
+          <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Profile Settings</div>
+            <div class="card-body">
+              <form>
+                {% csrf_token %}
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" value="{{ user.first_name }}">
                   </div>
-                  <div class="mb-3">
-                    <label for="storeEmail" class="form-label">Store Email</label>
-                    <input type="email" class="form-control" id="storeEmail" value="contact@synapse.com">
+                  <div class="col-md-6">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" value="{{ user.last_name }}">
                   </div>
-                  <div class="mb-3">
-                    <label for="storePhone" class="form-label">Store Phone</label>
-                    <input type="text" class="form-control" id="storePhone" value="555-123-4567">
+                  <div class="col-12">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="{{ user.email }}">
                   </div>
-                  <div class="mb-3">
-                    <label for="storeCurrency" class="form-label">Currency</label>
-                    <select class="form-select" id="storeCurrency">
-                      <option selected>USD ($)</option>
-                      <option>EUR (€)</option>
-                      <option>GBP (£)</option>
-                    </select>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-accent">
+                      <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
                   </div>
-                  <button type="submit" class="btn btn-primary">Save Changes</button>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
-          
-          <!-- Other tabs would go here -->
-          <div class="tab-pane fade" id="store">
-            <!-- Store settings content -->
-          </div>
-          <div class="tab-pane fade" id="payment">
-            <!-- Payment settings content -->
-          </div>
-          <!-- And so on... -->
         </div>
+
+        <!-- Store Tab -->
+        <div class="tab-pane fade" id="store">
+          <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Store Settings</div>
+            <div class="card-body">
+              <form>
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Store Name</label>
+                  <input type="text" class="form-control" value="Synapse">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Store Email</label>
+                  <input type="email" class="form-control" value="contact@synapse.com">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Currency</label>
+                  <select class="form-select">
+                    <option selected>KES (Ksh)</option>
+                    <option>USD ($)</option>
+                    <option>EUR (€)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-accent">
+                  <i class="fas fa-save me-1"></i>Save Changes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Tab -->
+        <div class="tab-pane fade" id="password">
+          <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Change Password</div>
+            <div class="card-body">
+              <form>
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Current Password</label>
+                  <input type="password" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">New Password</label>
+                  <input type="password" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-accent">
+                  <i class="fas fa-key me-1"></i>Update Password
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div class="tab-pane fade" id="notifications">
+          <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Notification Preferences</div>
+            <div class="card-body">
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                <label class="form-check-label" for="emailNotif">Email notifications for orders</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="promoNotif">
+                <label class="form-check-label" for="promoNotif">Promotional emails</label>
+              </div>
+              <button class="btn btn-accent">
+                <i class="fas fa-save me-1"></i>Save Preferences
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}
